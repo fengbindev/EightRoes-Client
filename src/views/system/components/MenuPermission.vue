@@ -16,9 +16,9 @@ import Toolbar from '@/components/Toolbar/Toolbar'
 import TreePermission from '@/views/system/components/TreePermission.vue'
 import { getPermissionTree, savePermission } from '@/api/system'
 import { asyncRouterMap } from '@/config/router.config'
-import { getMenuTreePermission } from '@/utils/permissions'
+import { getMenuTreePermission } from '@/utils/treeutil'
 export default {
-  name: 'BranchModal',
+  name: 'MenuPermission',
   components: {
     Toolbar,
     TreePermission

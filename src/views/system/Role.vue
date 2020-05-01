@@ -18,7 +18,7 @@
       </a-form>
     </div>
     <div class="table-operator">
-      <a-button v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
+      <a-button v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()" v-priv="'User.Add'">新建</a-button>
     </div>
     <s-table
       size="default"

@@ -1,31 +1,35 @@
 import Vue from 'vue'
-import { login, getInfo, logout } from '@/api/login'
+import { login, getUserPriv, logout } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 
 const user = {
   state: {
     token: '',
-    name: '',
+    adminUserName: '',
+    userName: '',
     welcome: '',
     avatar: '',
-    roles: [],
-    info: {}
+    priv: '',
+    info: ''
   },
 
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token
     },
-    SET_NAME: (state, { name, welcome }) => {
-      state.name = name
+    SET_USERNAME: (state, { userName, welcome }) => {
+      state.userName = userName
       state.welcome = welcome
+    },
+    SET_ADMIN_USERNAME: (state, adminUserName) => {
+      state.adminUserName = adminUserName
     },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
     },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles
+    SET_PRIV: (state, priv) => {
+      state.priv = priv
     },
     SET_INFO: (state, info) => {
       state.info = info
@@ -50,28 +54,15 @@ const user = {
     // 获取用户信息
     GetInfo ({ commit }) {
       return new Promise((resolve, reject) => {
-        getInfo().then(response => {
-          const result = response.result
-
-          if (result.role && result.role.permissions.length > 0) {
-            const role = result.role
-            role.permissions = result.role.permissions
-            role.permissions.map(per => {
-              if (per.actionEntitySet != null && per.actionEntitySet.length > 0) {
-                const action = per.actionEntitySet.map(action => { return action.action })
-                per.actionList = action
-              }
-            })
-            role.permissionList = role.permissions.map(permission => { return permission.permissionId })
-            commit('SET_ROLES', result.role)
-            commit('SET_INFO', result)
-          } else {
-            reject(new Error('getInfo: roles must be a non-null array !'))
+        getUserPriv().then(response => {
+          const result = response.data
+          if (result.keys) {
+            commit('SET_PRIV', result.keys)
           }
-
-          commit('SET_NAME', { name: result.name, welcome: welcome() })
-          commit('SET_AVATAR', result.avatar)
-
+          commit('SET_ADMIN_USERNAME', result.adminUserName)
+          commit('SET_USERNAME', { userName: result.userName, welcome: welcome() })
+          commit('SET_AVATAR', '/avatar2.jpg')
+          commit('SET_INFO', { userName: result.userName, realName: result.realName })
           resolve(response)
         }).catch(error => {
           reject(error)
@@ -88,7 +79,7 @@ const user = {
           resolve()
         }).finally(() => {
           commit('SET_TOKEN', '')
-          commit('SET_ROLES', [])
+          commit('SET_PRIV', [])
           Vue.ls.remove(ACCESS_TOKEN)
         })
       })
