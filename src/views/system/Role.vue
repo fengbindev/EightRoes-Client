@@ -18,7 +18,7 @@
       </a-form>
     </div>
     <div class="table-operator">
-      <a-button v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()" v-priv="'User.Add'">新建</a-button>
+      <a-button v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()" v-priv="'RoleManagerPriv.Add'">新建</a-button>
     </div>
     <s-table
       size="default"
@@ -28,9 +28,6 @@
       :columns="columns"
       :data="loadData"
     >
-      <span slot="status" slot-scope="text,record">
-        <a-switch :checked="record.status==0" @change="onChangeStatus(record)"/>
-      </span>
       <span slot="action" slot-scope="text, record">
         <a v-if="editEnabel" @click="handleScope(record)">数据权限</a>
         <a-divider type="vertical" />
@@ -117,12 +114,8 @@ export default {
       },
       selectedRowKeys: [],
       selectedRows: [],
-      // addEnable: checkPermission('system:role:add'),
-      // editEnabel: checkPermission('system:role:edit'),
-      // removeEnable: checkPermission('system:role:remove')
-      addEnable: true,
-      editEnabel: true,
-      removeEnable: true
+      editEnabel: this.$auth('RoleManagerPriv.Add'),
+      removeEnable: this.$auth('RoleManagerPriv.Add')
     }
   },
   created () {

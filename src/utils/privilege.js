@@ -19,7 +19,9 @@ Privilege.prototype.hasPriv = function (k) {
   if (adminUserName && userName && adminUserName === userName) {
     return true
   }
-  return this.data[k]
+  k = k.replace(/'/g, '')
+  const flag = this.data.hasOwnProperty(k)
+  return flag
 }
 Privilege.prototype.update = function (obj) {
   if (!obj) {
