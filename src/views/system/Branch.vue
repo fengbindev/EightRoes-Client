@@ -18,7 +18,7 @@
       </a-form>
     </div>
     <div class="table-operator">
-      <a-button v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
+      <a-button type="primary" icon="plus" @click="$refs.modal.add()" v-priv="'BranchManagerPriv.Add'">新建</a-button>
     </div>
     <a-table
       ref="table"
@@ -30,18 +30,16 @@
       :columns="columns"
       :dataSource="data">
       <span slot="action" slot-scope="text, record">
-        <a v-if="editEnabel" @click="handlePermission(record)">权限范围</a>
-        <a-divider type="vertical" />
+        <a v-if="privRangeEnable" @click="handlePermission(record)">权限范围</a>
+        <a-divider v-if="privRangeEnable" type="vertical" />
         <a v-if="editEnabel" @click="handleEdit(record)">编辑</a>
-        <!-- <a-divider type="vertical" />
-        <a v-if="addEnable" @click="handleAdd(record.deptId+'')">新增</a> -->
-        <a-divider type="vertical" />
+        <a-divider v-if="editEnabel" type="vertical" />
         <a-popconfirm
           v-if="removeEnable"
           title="确定要删除吗?"
           @confirm="() => handleDelete(record.branchInnercode)"
         >
-          <a href="javascript:;">删除</a>
+          <a v-if="removeEnable" href="javascript:;">删除</a>
         </a-popconfirm>
       </span>
     </a-table>
@@ -117,12 +115,9 @@ export default {
       expandedRowKeys: [],
       pagination: false,
       loading: false,
-      // addEnable: checkPermission('system:dept:add'),
-      // editEnabel: checkPermission('system:dept:edit'),
-      // removeEnable: checkPermission('system:dept:remove')
-      addEnable: true,
-      editEnabel: true,
-      removeEnable: true
+      privRangeEnable: this.$auth('BranchManagerPriv.PrivRange'),
+      editEnabel: this.$auth('BranchManagerPriv.Edit'),
+      removeEnable: this.$auth('BranchManagerPriv.Delete')
     }
   },
   filters: {

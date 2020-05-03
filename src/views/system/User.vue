@@ -18,7 +18,7 @@
       </a-form>
     </div>
     <div class="table-operator">
-      <a-button v-if="addEnable" type="primary" icon="plus" @click="$refs.modal.add()">新建</a-button>
+      <a-button type="primary" icon="plus" @click="$refs.modal.add()" v-priv="'UserManagerPriv.Add'">新建</a-button>
       <a-dropdown v-if="removeEnable&&selectedRowKeys.length > 0">
         <a-button type="danger" icon="delete" @click="() => handleDelete(selectedRowKeys.join())">删除</a-button>
       </a-dropdown>
@@ -45,16 +45,16 @@
         </a-tag>
       </span>
       <span slot="action" slot-scope="text, record">
-        <a v-if="editEnabel" @click="handleScope(record)">数据权限</a>
-        <a-divider type="vertical" />
+        <a v-if="privRangeEnable" @click="handleScope(record)">数据权限</a>
+        <a-divider v-if="privRangeEnable" type="vertical" />
         <a v-if="editEnabel" @click="handleEdit(record)">编辑</a>
-        <a-divider type="vertical" />
+        <a-divider v-if="editEnabel" type="vertical" />
         <a-popconfirm
           v-if="removeEnable"
           title="确定要删除吗?"
           @confirm="() => handleDelete(record.userName)"
         >
-          <a href="javascript:;">删除</a>
+          <a v-if="removeEnable" href="javascript:;">删除</a>
         </a-popconfirm>
       </span>
     </s-table>
@@ -123,9 +123,9 @@ export default {
       },
       selectedRowKeys: [],
       selectedRows: [],
-      addEnable: true,
-      editEnabel: true,
-      removeEnable: true
+      privRangeEnable: this.$auth('UserManagerPriv.PrivRange'),
+      editEnabel: this.$auth('UserManagerPriv.Edit'),
+      removeEnable: this.$auth('UserManagerPriv.Delete')
     }
   },
   created () {
