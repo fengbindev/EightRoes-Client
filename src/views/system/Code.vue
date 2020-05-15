@@ -20,66 +20,54 @@
     <div class="table-operator">
       <a-button type="primary" icon="plus" @click="$refs.modal.add()" v-priv="'UserManagerPriv.Add'">新建</a-button>
       <a-dropdown v-if="removeEnable&&selectedRowKeys.length > 0">
-        <a-button type="danger" icon="delete" @click="() => handleDelete(selectedRowKeys.join())">删除</a-button>
+        <a-button type="danger" icon="delete" @click="() => handleDelete()">删除</a-button>
       </a-dropdown>
     </div>
     <s-table
       size="default"
       ref="table"
-      rowKey="userName"
-      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+      rowKey="codeType"
+      :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onChange}"
       :columns="columns"
       :data="loadData"
     >
-      <span slot="status" slot-scope="text,record">
-        <a-icon type="check" :style="{color: '#67c23a'}" v-if="record.status==='Y'" />
+      <a slot="codeType" slot-scope="codeType" @click="$refs.itemListModal.open(codeType)">{{ codeType }}</a>
+      <span slot="fixed" slot-scope="text,record">
+        <a-icon type="check" :style="{color: '#67c23a'}" v-if="record.fixed" />
         <a-icon type="close" :style="{color: '#f56c6c'}" v-else/>
       </span>
-      <span slot="roles" slot-scope="roles">
-        <a-tag
-          v-for="role in roles"
-          color="blue"
-          :key="role.roleCode"
-        >
-          {{ role.roleName }}
-        </a-tag>
-      </span>
       <span slot="action" slot-scope="text, record">
-        <a v-if="privRangeEnable" @click="handleScope(record)">数据权限</a>
-        <a-divider v-if="privRangeEnable" type="vertical" />
-        <a v-if="editEnabel" @click="handleEdit(record)">编辑</a>
+        <a v-if="editEnabel" @click="handleEdit(record)" :disabled="record.fixed">编辑</a>
         <a-divider v-if="editEnabel" type="vertical" />
         <a-popconfirm
           v-if="removeEnable"
           title="确定要删除吗?"
-          @confirm="() => handleDelete(record.userName)"
+          @confirm="() => handleDelete()"
         >
-          <a v-if="removeEnable" href="javascript:;">删除</a>
+          <a v-if="removeEnable" href="javascript:;" :disabled="record.fixed">删除</a>
         </a-popconfirm>
       </span>
     </s-table>
-    <user-modal ref="modal" @ok="handleOk" />
-    <menu-permission-modal ref="permissionModal" type="U" :id="id"/>
+    <code-modal ref="modal" @ok="handleOk"/>
+    <code-item-list ref="itemListModal"/>
   </a-card>
 </template>
 
 <script>
+import CodeModal from '@/views/system/components/CodeModal'
+import CodeItemList from '@/views/system/components/CodeItemList'
 import { STable } from '@/components'
-import MenuPermissionModal from '@/views/system/components/MenuPermissionModal'
-import { getUserList, delUser } from '@/api/system'
-import UserModal from '@/views/system/components/UserModal'
-// import { checkPermission } from '@/utils/permissions'
+import { getCodeList, delCode } from '@/api/system'
 export default {
-  name: 'TableList',
+  name: 'Code',
   components: {
     STable,
-    UserModal,
-    MenuPermissionModal
+    CodeModal,
+    CodeItemList
   },
   data () {
     return {
       description: '',
-      visible: false,
       id: '',
       mdl: {},
       permissions: [],
@@ -90,27 +78,24 @@ export default {
       // 表头
       columns: [
         {
-          title: '用户名',
-          dataIndex: 'userName'
+          title: '代码类别',
+          dataIndex: 'codeType',
+          scopedSlots: { customRender: 'codeType' }
         },
         {
-          title: '真实姓名',
-          dataIndex: 'realName'
+          title: '代码名称',
+          dataIndex: 'codeName'
         },
         {
-          title: '用户状态',
-          dataIndex: 'status',
-          scopedSlots: { customRender: 'status' }
+          title: '固定配置项',
+          dataIndex: 'fixed',
+          scopedSlots: { customRender: 'fixed' }
         },
         {
-          title: '所属机构',
-          dataIndex: 'branchName'
+          title: '备注',
+          dataIndex: 'memo'
         },
         {
-          title: '所属角色',
-          dataIndex: 'roles',
-          scopedSlots: { customRender: 'roles' }
-        }, {
           title: '操作',
           width: '200px',
           dataIndex: 'action',
@@ -119,11 +104,10 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        return getUserList(Object.assign(parameter, this.queryParam))
+        return getCodeList(Object.assign(parameter, this.queryParam))
       },
       selectedRowKeys: [],
       selectedRows: [],
-      privRangeEnable: this.$auth('UserManagerPriv.PrivRange'),
       editEnabel: this.$auth('UserManagerPriv.Edit'),
       removeEnable: this.$auth('UserManagerPriv.Delete')
     }
@@ -131,19 +115,11 @@ export default {
   created () {
   },
   methods: {
-    onSelectChange (selectedRowKeys) {
-      console.log('selectedRowKeys changed: ', selectedRowKeys)
-      this.selectedRowKeys = selectedRowKeys
-    },
     handleAdd (parentId) {
       this.$refs.modal.add(parentId)
     },
     handleEdit (record) {
       this.$refs.modal.edit(record)
-    },
-    handleScope (record) {
-      this.id = record.userName
-      this.$refs.permissionModal.permission(record)
     },
     onChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
@@ -153,8 +129,20 @@ export default {
       this.$refs.table.refresh(true)
       console.log('handleSaveOk')
     },
-    handleDelete (ids) {
-      delUser(ids).then(res => {
+    handleDelete () {
+      const selectedRows = this.selectedRows
+      for (let i = 0; i < selectedRows.length; i++) {
+        const row = selectedRows[i]
+        if (row.fixed) {
+          this.$error({
+            title: '错误',
+            content: '所选记录中含有固定配置项,不能修改'
+          })
+          return
+        }
+      }
+      const ids = this.selectedRowKeys.join()
+      delCode(ids).then(res => {
         if (res.status === 1) {
           this.$message.success(`删除成功`)
           this.handleOk()

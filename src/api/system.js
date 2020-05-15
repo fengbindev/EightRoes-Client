@@ -4,7 +4,8 @@ const api = {
   user: '/user',
   role: '/role',
   permission: '/privilege',
-  branch: '/branch'
+  branch: '/branch',
+  code: '/code'
 }
 
 export default api
@@ -128,6 +129,67 @@ export function saveUser (parameter) {
 export function delUser (ids) {
   return axios({
     url: api.user + `/${ids}`,
+    method: 'delete'
+  })
+}
+
+export function getCodeList (parameter) {
+  return axios({
+    url: api.code,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function saveCode (parameter) {
+  if (parameter.method === 'add') {
+    return axios({
+      url: api.code,
+      method: 'post',
+      data: parameter
+    })
+  } else if (parameter.method === 'edit') {
+    return axios({
+      url: api.code + `/${parameter.oldCodeType}`,
+      method: 'put',
+      data: parameter
+    })
+  }
+}
+
+export function delCode (ids) {
+  return axios({
+    url: api.code + `/${ids}`,
+    method: 'delete'
+  })
+}
+
+export function getCodeItemList (codeType) {
+  return axios({
+    url: api.code + `/${codeType}/items`,
+    method: 'get'
+  })
+}
+
+export function saveCodeItem (parameter) {
+  if (parameter.method === 'add') {
+    return axios({
+      url: api.code + `/${parameter.codeType}/items`,
+      method: 'post',
+      data: parameter
+    })
+  } else if (parameter.method === 'edit') {
+    return axios({
+      url: api.code + `/${parameter.codeType}/items/${parameter.oldCodeValue}`,
+      method: 'put',
+      data: parameter
+    })
+  }
+}
+
+export function delCodeItem (codeType, ids) {
+  return axios({
+    url: api.code + `/${codeType}/items/${ids}`,
     method: 'delete'
   })
 }
