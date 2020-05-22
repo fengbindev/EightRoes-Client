@@ -54,7 +54,7 @@ import { getRoleList, delRole } from '@/api/system'
 import RoleModal from '@/views/system/components/RoleModal'
 // import { checkPermission } from '@/utils/permissions'
 export default {
-  name: 'TableList',
+  name: 'Role',
   components: {
     STable,
     RoleModal,

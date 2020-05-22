@@ -70,7 +70,7 @@ import { getUserList, delUser } from '@/api/system'
 import UserModal from '@/views/system/components/UserModal'
 // import { checkPermission } from '@/utils/permissions'
 export default {
-  name: 'TableList',
+  name: 'User',
   components: {
     STable,
     UserModal,

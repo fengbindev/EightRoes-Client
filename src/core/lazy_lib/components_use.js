@@ -19,6 +19,7 @@ import {
   Select,
   Card,
   Form,
+  FormModel, /* 1.5版本新增 */
   Row,
   Col,
   Modal,
@@ -49,7 +50,8 @@ import {
   notification,
   Tree,
   TreeSelect,
-  Empty
+  Empty,
+  Anchor
 } from 'ant-design-vue'
 // import VueCropper from 'vue-cropper'
 
@@ -64,6 +66,7 @@ Vue.use(Checkbox)
 Vue.use(Select)
 Vue.use(Card)
 Vue.use(Form)
+Vue.use(FormModel)
 Vue.use(Row)
 Vue.use(Col)
 Vue.use(Modal)
@@ -95,6 +98,7 @@ Vue.use(notification)
 Vue.use(Tree)
 Vue.use(TreeSelect)
 Vue.use(Empty)
+Vue.use(Anchor)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message

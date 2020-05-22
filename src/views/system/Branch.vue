@@ -57,7 +57,7 @@ import MenuPermissionModal from '@/views/system/components/MenuPermissionModal'
 
 // import { checkPermission } from '@/utils/permissions'
 export default {
-  name: 'TableList',
+  name: 'Branch',
   components: {
     T,
     BranchModal,

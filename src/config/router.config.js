@@ -354,6 +354,12 @@ export const asyncRouterMap = [
             name: 'code',
             component: () => import('@/views/system/Code'),
             meta: { title: '代码管理', icon: 'tool', keepAlive: true }
+          },
+          {
+            path: '/system/config',
+            name: 'config',
+            component: () => import('@/views/system/Config'),
+            meta: { title: '配置管理', icon: 'tool', keepAlive: true }
           }
         ]
       }
