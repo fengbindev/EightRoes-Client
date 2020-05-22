@@ -1,31 +1,30 @@
 <template>
   <div>
-    <a-card :bordered="false">
-      <a-row class="form-row">
-        <a-col :span="18" :gutter="16">
-          <a-form-model ref="configValidate" :label-col="labelCol" :wrapper-col="wrapperCol" labelAlign="left">
-            <div v-for="config in configs" :key="config.id" class="config-group-wrap">
-              <h1 class="header-title">{{ config.name }}</h1>
-              <div v-for="item in config.configs" :key="item.id" style="margin-left: 20px;">
-                <a-form-model-item label="系统管理员用户名：">
-                  <component :is="controlType(item)" v-model="item.value" :config="item"></component>
-                </a-form-model-item>
+    <a-spin :spinning="spinning">
+      <a-card :bordered="false">
+        <a-row class="form-row">
+          <a-col :span="18" :gutter="16">
+            <a-form-model ref="configValidate" :label-col="labelCol" :wrapper-col="wrapperCol" labelAlign="left">
+              <div v-for="config in configs" :key="config.id" class="config-group-wrap">
+                <h1 class="header-title" :id="config.id">{{ config.name }}</h1>
+                <div v-for="item in config.configs" :key="item.id" style="margin-left: 20px;">
+                  <a-form-model-item label="系统管理员用户名：">
+                    <component :is="controlType(item)" v-model="item.value" :config="item"></component>
+                  </a-form-model-item>
+                </div>
               </div>
-            </div>
-          </a-form-model>
-        </a-col>
-        <a-col :span="6">
-          <a-anchor>
-            <a-anchor-link href="#components-anchor-demo-basic" title="基础插件" />
-            <a-anchor-link href="#components-anchor-demo-static" title="Static demo" />
-            <a-anchor-link href="#components-anchor-demo-static" title="Static demo" />
-            <a-anchor-link href="#components-anchor-demo-static" title="Static demo" />
-            <a-anchor-link href="#components-anchor-demo-static" title="Static demo" />
-            <a-anchor-link href="#components-anchor-demo-static" title="Static demo" />
-          </a-anchor>
-        </a-col>
-      </a-row>
-    </a-card>
+            </a-form-model>
+          </a-col>
+          <a-col :span="6">
+            <a-anchor>
+              <template v-for="config in configs">
+                <a-anchor-link :href="'#' + config.id" :title="config.name" :key="config.name"/>
+              </template>
+            </a-anchor>
+          </a-col>
+        </a-row>
+      </a-card>
+    </a-spin>
     <footer-tool-bar :style="{ width: isSideMenu() && isDesktop() ? `calc(100% - ${sidebarOpened ? 256 : 80}px)` : '100%'}">
       <a-button type="primary" @click="saveConfig" :loading="loading">提交</a-button>
     </footer-tool-bar>
@@ -44,6 +43,7 @@ import ControlDate from './components/control/ControlDate.vue'
 import ControlDateTime from './components/control/ControlDateTime.vue'
 import FooterToolBar from '@/components/FooterToolbar'
 import { mixin, mixinDevice } from '@/utils/mixin'
+import { getConfig, saveConfig } from '@/api/system'
 export default {
   name: 'Config',
   mixins: [mixin, mixinDevice],
@@ -64,37 +64,36 @@ export default {
       labelCol: { span: 8 },
       wrapperCol: { span: 14 },
       description: '',
+      spinning: false,
       loading: false,
-      configs: [
-        {
-            'configs': [
-                {
-                    'dataType': 'Long',
-                    'controlType': 'DateTime',
-                    'name': '系统管理员的用户名',
-                    'id': 'Platform.AdminUserName',
-                    'value': '',
-                    options: [
-                              { key: 'zvingclassic', value: '经典蓝色' },
-                              { key: 'zvinggreen', value: '清新绿色' },
-                              { key: 'zvingdeep', value: '雅致深色' },
-                              { key: 'zvingred', value: '庄重红色' },
-                              { key: 'zvingpurple', value: '优雅紫色' },
-                              { key: 'zvingflat', value: '明快扁平' }
-                            ]
-                }
-            ],
-            'name': '基础平台',
-            'id': 'com.ssrs.platform.PlatformPlugin'
-        }
-    ]
+      configs: []
     }
   },
   created () {
+    this.spinning = true
+    getConfig().then(res => {
+      if (res.status === 1) {
+        this.spinning = false
+          this.configs = res.data
+        } else {
+          this.$message.error(res.message)
+        }
+    })
   },
   methods: {
     saveConfig () {
-      console.log(this.configs)
+      this.loading = true
+      const params = JSON.stringify(this.configs)
+      saveConfig({ data: params }).then(res => {
+      this.loading = false
+      if (res.status === 1) {
+          this.$message.success(`保存成功`)
+        } else {
+          this.$message.error(res.message)
+        }
+    }).finally(() => {
+      this.loading = false
+    })
     },
     controlType (item) {
       if (item.controlType === 'Text' && item.dataType === 'Long') {

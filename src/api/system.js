@@ -5,7 +5,8 @@ const api = {
   role: '/role',
   permission: '/privilege',
   branch: '/branch',
-  code: '/code'
+  code: '/code',
+  config: '/configs'
 }
 
 export default api
@@ -191,5 +192,20 @@ export function delCodeItem (codeType, ids) {
   return axios({
     url: api.code + `/${codeType}/items/${ids}`,
     method: 'delete'
+  })
+}
+
+export function getConfig () {
+  return axios({
+    url: api.config,
+    method: 'get'
+  })
+}
+
+export function saveConfig (parameter) {
+  return axios({
+    url: api.config + '/saved',
+    method: 'put',
+    data: parameter
   })
 }
