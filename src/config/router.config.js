@@ -360,6 +360,12 @@ export const asyncRouterMap = [
             name: 'config',
             component: () => import('@/views/system/Config'),
             meta: { title: '配置管理', icon: 'tool', keepAlive: true }
+          },
+          {
+            path: '/system/schedule',
+            name: 'schedule',
+            component: () => import('@/views/system/Schedule'),
+            meta: { title: '定时任务', icon: 'tool', keepAlive: true }
           }
         ]
       }

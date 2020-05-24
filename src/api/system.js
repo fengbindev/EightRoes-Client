@@ -6,7 +6,8 @@ const api = {
   permission: '/privilege',
   branch: '/branch',
   code: '/code',
-  config: '/configs'
+  config: '/configs',
+  schedule: '/schedule'
 }
 
 export default api
@@ -207,5 +208,28 @@ export function saveConfig (parameter) {
     url: api.config + '/saved',
     method: 'put',
     data: parameter
+  })
+}
+
+export function getSchedule () {
+  return axios({
+    url: api.schedule,
+    method: 'get'
+  })
+}
+
+export function saveSchedule (parameter) {
+  return axios({
+    url: api.schedule,
+    method: 'put',
+    data: parameter
+  })
+}
+
+export function excutedSchedule (id) {
+  return axios({
+    url: api.schedule + '/executed',
+    method: 'post',
+    data: { id: id }
   })
 }
