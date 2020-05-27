@@ -350,6 +350,12 @@ export const asyncRouterMap = [
             meta: { title: '用户管理', icon: 'tool', keepAlive: true, priv: [ 'UserManagerPriv' ] }
           },
           {
+            path: '/system/security',
+            name: 'security',
+            component: () => import('@/views/system/Security'),
+            meta: { title: '账户安全', icon: 'tool', keepAlive: true }
+          },
+          {
             path: '/system/code',
             name: 'code',
             component: () => import('@/views/system/Code'),

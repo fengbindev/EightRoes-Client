@@ -105,12 +105,11 @@
           v-decorator="['mobile']"
           placeholder="请输入联系电话"/>
       </a-form-item>
-
     </a-form>
   </a-modal>
 </template>
 <script>
-import { getBranchList, getRoleListByBranch, saveUser } from '@/api/system'
+import { getBranchList, getRoleListByBranch, saveUser, initpwdcheck } from '@/api/system'
 import pick from 'lodash.pick'
 export default {
   name: 'UserModal',
@@ -132,7 +131,8 @@ export default {
       method: 'add',
       mdl: {},
       confirmLoading: false,
-      form: this.$form.createForm(this)
+      form: this.$form.createForm(this),
+      passwordVeriry: {}
     }
   },
   beforeCreate () {
@@ -140,6 +140,9 @@ export default {
   created () {
     getBranchList({ 'isSelect': 'Y' }).then(res => {
       this.depts = this.depts.concat(res.data)
+    })
+    initpwdcheck().then(res => {
+      this.passwordVeriry = { maxLen: res.data.maxLen, minLen: res.data.minLen }
     })
   },
   methods: {
@@ -200,7 +203,12 @@ export default {
     validateToNextPassword (rule, value, callback) {
       const form = this.form
       if (value) {
-        form.validateFields(['confirmPassword'], { force: true })
+        if (value.length < this.passwordVeriry.minLen || value.length > this.passwordVeriry.maxLen) {
+          // eslint-disable-next-line standard/no-callback-literal
+          callback(`必须是${this.passwordVeriry.minLen}-${this.passwordVeriry.maxLen}位的字符`)
+        } else {
+          form.validateFields(['confirmPassword'], { force: true })
+        }
       }
       callback()
     },

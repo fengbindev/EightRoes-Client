@@ -7,7 +7,8 @@ const api = {
   branch: '/branch',
   code: '/code',
   config: '/configs',
-  schedule: '/schedule'
+  schedule: '/schedule',
+  security: '/security'
 }
 
 export default api
@@ -231,5 +232,27 @@ export function excutedSchedule (id) {
     url: api.schedule + '/executed',
     method: 'post',
     data: { id: id }
+  })
+}
+
+export function getSecurity () {
+  return axios({
+    url: api.security,
+    method: 'get'
+  })
+}
+
+export function saveSecurity (parameter) {
+  return axios({
+    url: api.security,
+    method: 'put',
+    data: parameter
+  })
+}
+
+export function initpwdcheck () {
+  return axios({
+    url: api.user + '/initpwdcheck',
+    method: 'get'
   })
 }
