@@ -1,5 +1,5 @@
 import Privilege from '@/utils/privilege.js'
-
+// 这个没得用了，只是有的演示页面用的
 export const PERMISSION_ENUM = {
   'add': { key: 'add', label: '新增' },
   'delete': { key: 'delete', label: '删除' },

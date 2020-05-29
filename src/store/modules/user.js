@@ -41,10 +41,12 @@ const user = {
     Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
-          const result = response.data
-          Vue.ls.set(ACCESS_TOKEN, result.access_token, result.expires_in)
-          commit('SET_TOKEN', result.token)
-          resolve()
+          if (response.status === 1) {
+            const result = response.data
+            Vue.ls.set(ACCESS_TOKEN, result.access_token, result.expires_in)
+            commit('SET_TOKEN', result.token)
+          }
+          resolve(response)
         }).catch(error => {
           reject(error)
         })

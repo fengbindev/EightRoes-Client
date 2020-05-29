@@ -65,7 +65,6 @@
 <script>
 import { getRoleList, getPermissions } from '@/api/manage'
 import { mixinDevice } from '@/utils/mixin'
-import { actionToObject } from '@/utils/permissions'
 import pick from 'lodash.pick'
 
 export default {
@@ -146,7 +145,7 @@ export default {
       getPermissions().then(res => {
         const result = res.result
         this.permissions = result.map(permission => {
-          const options = actionToObject(permission.actionData)
+          const options = JSON.parse(permission.actionData)
           permission.checkedAll = false
           permission.selected = []
           permission.indeterminate = false
