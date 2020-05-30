@@ -28,6 +28,7 @@
         label="原密码"
       >
         <a-input
+          type="password"
           v-decorator="['oldPassword',{rules: [{ required: true, message: '请输入原密码' }]}]"
         />
       </a-form-item>
@@ -58,7 +59,8 @@
   </a-modal>
 </template>
 <script>
-  import { initpwdcheck } from '@/api/system'
+import { initpwdcheck, changeloginpassword } from '@/api/system'
+import { encrypt } from '@/utils/rsaEncrypt'
 export default {
   name: 'LoginEditPwdModal',
   // eslint-disable-next-line
@@ -89,6 +91,11 @@ export default {
       }
     }
   },
+  created () {
+    this.$nextTick(() => {
+       this.form.setFieldsValue({ 'userName': this.userName })
+    })
+  },
   beforeCreate () {
     initpwdcheck().then(res => {
       this.passwordVeriry = { maxLen: res.data.maxLen, minLen: res.data.minLen }
@@ -98,9 +105,21 @@ export default {
     handleSubmit (e) {
       e.preventDefault()
       this.form.validateFields((err, values) => {
+        values.oldPassword = encrypt(values.oldPassword)
+        values.password = encrypt(values.password)
+        values.confirmPassword = encrypt(values.confirmPassword)
         if (!err) {
-          console.log('Received values of form: ', values)
           this.confirmLoading = true
+          changeloginpassword(values).then(res => {
+            if (res.status === 1) {
+              this.$message.success('操作成功，请使用新密码登录')
+              this.isShow = false
+            } else {
+              this.$message.error(res.message)
+            }
+          }).finally(() => {
+            this.confirmLoading = false
+          })
         }
       })
     },

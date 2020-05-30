@@ -256,3 +256,11 @@ export function initpwdcheck () {
     method: 'get'
   })
 }
+
+export function changeloginpassword (parameter) {
+  return axios({
+    url: api.user + '/changeloginpassword',
+    method: 'put',
+    data: parameter
+  })
+}

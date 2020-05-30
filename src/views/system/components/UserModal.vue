@@ -110,6 +110,7 @@
 </template>
 <script>
 import { getBranchList, getRoleListByBranch, saveUser, initpwdcheck } from '@/api/system'
+import { encrypt } from '@/utils/rsaEncrypt'
 import pick from 'lodash.pick'
 export default {
   name: 'UserModal',
@@ -178,10 +179,11 @@ export default {
       this.form.validateFields((err, values) => {
         if (!err) {
           values.method = this.method
+          values.password = encrypt(values.password)
+          values.confirmPassword = encrypt(values.confirmPassword)
           if (values.roles) {
             values.roles = values.roles.join()
           }
-          console.log('Received values of form: ', values)
           // this.$emit('ok')
           this.confirmLoading = true
           saveUser(values).then(res => {

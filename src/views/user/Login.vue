@@ -66,9 +66,9 @@
 </template>
 
 <script>
-import md5 from 'md5'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
+import { encrypt } from '@/utils/rsaEncrypt'
 import { axios } from '@/utils/request'
 import UserLoginEditPwdModal from '@/views/user/components/UserLoginEditPwdModal'
 
@@ -121,7 +121,7 @@ export default {
           const loginParams = { ...values }
           delete loginParams.userName
           loginParams['userName'] = values.userName
-          loginParams.password = md5(values.password)
+          loginParams.password = encrypt(values.password)
           if (this.showVerifyCode) {
             if (!loginParams.verifyCode) {
               this.$notification['info']({
