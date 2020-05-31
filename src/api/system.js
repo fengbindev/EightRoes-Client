@@ -136,6 +136,20 @@ export function delUser (ids) {
   })
 }
 
+export function enableUser (ids) {
+  return axios({
+    url: api.user + `/enable/${ids}`,
+    method: 'put'
+  })
+}
+
+export function disabledUser (ids) {
+  return axios({
+    url: api.user + `/disable/${ids}`,
+    method: 'put'
+  })
+}
+
 export function getCodeList (parameter) {
   return axios({
     url: api.code,
@@ -260,6 +274,14 @@ export function initpwdcheck () {
 export function changeloginpassword (parameter) {
   return axios({
     url: api.user + '/changeloginpassword',
+    method: 'put',
+    data: parameter
+  })
+}
+
+export function password (parameter) {
+  return axios({
+    url: api.user + '/password',
     method: 'put',
     data: parameter
   })

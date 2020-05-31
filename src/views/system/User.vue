@@ -20,7 +20,14 @@
     <div class="table-operator">
       <a-button type="primary" icon="plus" @click="$refs.modal.add()" v-priv="'UserManagerPriv.Add'">新建</a-button>
       <a-dropdown v-if="removeEnable&&selectedRowKeys.length > 0">
-        <a-button type="danger" icon="delete" @click="() => handleDelete(selectedRowKeys.join())" v-priv="'UserManagerPriv.Delete'">删除</a-button>
+        <a-menu slot="overlay">
+          <a-menu-item> <a-icon type="delete" /><span @click="() => handleDeleteBatch(selectedRowKeys.join())" v-priv="'UserManagerPriv.Delete'">删除</span></a-menu-item>
+          <a-menu-item><a-icon type="lock" /><span @click="() => handleEnable(selectedRowKeys.join())" v-priv="'UserManagerPriv.Enable'">启用</span></a-menu-item>
+          <a-menu-item><a-icon type="lock" /><span @click="() => handleDisabled(selectedRowKeys.join())" v-priv="'UserManagerPriv.Disable'">禁用</span></a-menu-item>
+        </a-menu>
+        <a-button style="margin-left: 8px">
+          批量操作 <a-icon type="down" />
+        </a-button>
       </a-dropdown>
     </div>
     <s-table
@@ -49,37 +56,51 @@
         <a-divider v-if="privRangeEnable" type="vertical" />
         <a v-if="editEnabel" @click="handleEdit(record)">编辑</a>
         <a-divider v-if="editEnabel" type="vertical" />
-        <a-popconfirm
-          v-if="removeEnable"
-          title="确定要删除吗?"
-          @confirm="() => handleDelete(record.userName)"
-        >
-          <a v-if="removeEnable" href="javascript:;">删除</a>
-        </a-popconfirm>
+        <a-dropdown>
+          <a class="ant-dropdown-link" @click="e => e.preventDefault()">更多<a-icon type="down" /></a>
+          <a-menu slot="overlay">
+            <a-menu-item>
+              <a-popconfirm
+                v-if="removeEnable"
+                title="确定要删除吗?"
+                @confirm="() => handleDelete(record.userName)"
+              >
+                <a v-if="removeEnable" href="javascript:;">删除</a>
+                </a-popconfirm>
+            </a-menu-item>
+            <a-menu-item>
+              <a v-priv="'UserManagerPriv.ChangePassword'" href="javascript:;" @click="modifyPasswordHandler(record.userName)">修改密码</a>
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
       </span>
     </s-table>
     <user-modal ref="modal" @ok="handleOk" />
     <menu-permission-modal ref="permissionModal" type="U" :id="id"/>
+    <modify-password-modal :edit-pwd-modal.sync="editPwdModal" :user-name="userName" v-if="editPwdModal"/>
   </a-card>
 </template>
 
 <script>
 import { STable } from '@/components'
 import MenuPermissionModal from '@/views/system/components/MenuPermissionModal'
-import { getUserList, delUser } from '@/api/system'
+import { getUserList, delUser, enableUser, disabledUser } from '@/api/system'
 import UserModal from '@/views/system/components/UserModal'
-// import { checkPermission } from '@/utils/permissions'
+import ModifyPasswordModal from '@/views/system/components/ModifyPasswordModal'
 export default {
   name: 'User',
   components: {
     STable,
     UserModal,
-    MenuPermissionModal
+    MenuPermissionModal,
+    ModifyPasswordModal
   },
   data () {
     return {
       description: '',
       visible: false,
+      editPwdModal: false,
+      userName: '',
       id: '',
       mdl: {},
       permissions: [],
@@ -151,7 +172,16 @@ export default {
     },
     handleOk () {
       this.$refs.table.refresh(true)
-      console.log('handleSaveOk')
+    },
+    handleDeleteBatch (ids) {
+      const that = this
+      this.$confirm({
+        title: '确定要删除吗？删除后无法恢复！',
+        okType: 'danger',
+        onOk () {
+          that.handleDelete(ids)
+        }
+      })
     },
     handleDelete (ids) {
       delUser(ids).then(res => {
@@ -162,6 +192,30 @@ export default {
           this.$message.error(res.message)
         }
       })
+    },
+    handleEnable (ids) {
+      enableUser(ids).then(res => {
+        if (res.status === 1) {
+          this.$message.success(`启用成功`)
+          this.handleOk()
+        } else {
+          this.$message.error(res.message)
+        }
+      })
+    },
+    handleDisabled (ids) {
+      disabledUser(ids).then(res => {
+        if (res.status === 1) {
+          this.$message.success(`禁用成功`)
+          this.handleOk()
+        } else {
+          this.$message.error(res.message)
+        }
+      })
+    },
+    modifyPasswordHandler (id) {
+      this.userName = id
+      this.editPwdModal = true
     }
   },
   watch: {
