@@ -8,7 +8,7 @@
   >
     <div class="right-list-toolbar right-list-panel-card">
       <toolbar>
-        <a-button icon="plus" @click="$refs.modal.add()" v-priv="'CodeManagerPriv.Add'">新建</a-button>
+        <a-button icon="plus" @click="$refs.modal.add()" :disabled="!allowAddItem" v-priv="'CodeManagerPriv.Add'">新建</a-button>
         <a-button icon="save" @click="editClickHandler" :disabled="selectedRows.length != 1 || editEnable" v-priv="'CodeManagerPriv.Edit'">编辑</a-button>
         <a-button icon="delete" @click="delClickHandler" :disabled="selectedRows.length === 0 || delEnable" v-priv="'CodeManagerPriv.Delete'">删除</a-button>
       </toolbar>
@@ -52,6 +52,7 @@ export default {
       selectedRowKeys: [],
       codeType: '',
       data: [],
+      allowAddItem: true,
       editEnable: false,
       delEnable: false,
       columns: [
@@ -91,7 +92,8 @@ export default {
          this.loading = false
        })
     },
-    open (codeType) {
+    open (codeType, allowAddItem) {
+      this.allowAddItem = allowAddItem
       this.codeType = codeType
       this.visible = true
       this.loadData()

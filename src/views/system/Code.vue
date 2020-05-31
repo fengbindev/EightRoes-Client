@@ -31,7 +31,7 @@
       :columns="columns"
       :data="loadData"
     >
-      <a slot="codeType" slot-scope="codeType" @click="$refs.itemListModal.open(codeType)">{{ codeType }}</a>
+      <a slot="codeType" slot-scope="codeType" @click="$refs.itemListModal.open(codeType, allowAddItem)">{{ codeType }}</a>
       <span slot="fixed" slot-scope="text,record">
         <a-icon type="check" :style="{color: '#67c23a'}" v-if="record.fixed" />
         <a-icon type="close" :style="{color: '#f56c6c'}" v-else/>

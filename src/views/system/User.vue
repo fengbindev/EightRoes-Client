@@ -66,7 +66,7 @@
                 @confirm="() => handleDelete(record.userName)"
               >
                 <a v-if="removeEnable" href="javascript:;">删除</a>
-                </a-popconfirm>
+              </a-popconfirm>
             </a-menu-item>
             <a-menu-item>
               <a v-priv="'UserManagerPriv.ChangePassword'" href="javascript:;" @click="modifyPasswordHandler(record.userName)">修改密码</a>
