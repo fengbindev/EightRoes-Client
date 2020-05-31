@@ -24,10 +24,10 @@
             </div>
           </a-list-item-meta>
           <div slot="actions">
-            <a @click="edit(item)">编辑</a>
+            <a @click="edit(item)" v-priv="'ScheduleManagerPriv.Edit'">编辑</a>
           </div>
           <div slot="actions">
-            <a @click="excuted(item)">立即执行</a>
+            <a @click="excuted(item)" v-priv="'AccountConfigPriv.Run'">立即执行</a>
           </div>
         </a-list-item>
       </a-list>

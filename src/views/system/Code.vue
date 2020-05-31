@@ -18,9 +18,9 @@
       </a-form>
     </div>
     <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="$refs.modal.add()" v-priv="'UserManagerPriv.Add'">新建</a-button>
+      <a-button type="primary" icon="plus" @click="$refs.modal.add()" v-priv="'CodeManagerPriv.Add'">新建</a-button>
       <a-dropdown v-if="removeEnable&&selectedRowKeys.length > 0">
-        <a-button type="danger" icon="delete" @click="() => handleDelete()">删除</a-button>
+        <a-button type="danger" icon="delete" @click="() => handleDelete()" v-priv="'CodeManagerPriv.Delete'">删除</a-button>
       </a-dropdown>
     </div>
     <s-table
@@ -108,8 +108,8 @@ export default {
       },
       selectedRowKeys: [],
       selectedRows: [],
-      editEnabel: this.$auth('UserManagerPriv.Edit'),
-      removeEnable: this.$auth('UserManagerPriv.Delete')
+      editEnabel: this.$auth('CodeManagerPriv.Edit'),
+      removeEnable: this.$auth('CodeManagerPriv.Delete')
     }
   },
   created () {

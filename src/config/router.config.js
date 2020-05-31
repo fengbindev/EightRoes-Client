@@ -353,25 +353,25 @@ export const asyncRouterMap = [
             path: '/system/security',
             name: 'security',
             component: () => import('@/views/system/Security'),
-            meta: { title: '账户安全', icon: 'tool', keepAlive: true }
+            meta: { title: '账户安全', icon: 'tool', keepAlive: true, priv: [ 'AccountConfigPriv' ] }
           },
           {
             path: '/system/code',
             name: 'code',
             component: () => import('@/views/system/Code'),
-            meta: { title: '代码管理', icon: 'tool', keepAlive: true }
+            meta: { title: '代码管理', icon: 'tool', keepAlive: true, priv: [ 'CodeManagerPriv' ] }
           },
           {
             path: '/system/config',
             name: 'config',
             component: () => import('@/views/system/Config'),
-            meta: { title: '配置管理', icon: 'tool', keepAlive: true }
+            meta: { title: '配置管理', icon: 'tool', keepAlive: true, priv: [ 'ConfigManagerPriv' ] }
           },
           {
             path: '/system/schedule',
             name: 'schedule',
             component: () => import('@/views/system/Schedule'),
-            meta: { title: '定时任务', icon: 'tool', keepAlive: true }
+            meta: { title: '定时任务', icon: 'tool', keepAlive: true, priv: [ 'ScheduleManagerPriv' ] }
           }
         ]
       }

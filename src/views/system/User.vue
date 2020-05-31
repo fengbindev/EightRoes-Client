@@ -20,7 +20,7 @@
     <div class="table-operator">
       <a-button type="primary" icon="plus" @click="$refs.modal.add()" v-priv="'UserManagerPriv.Add'">新建</a-button>
       <a-dropdown v-if="removeEnable&&selectedRowKeys.length > 0">
-        <a-button type="danger" icon="delete" @click="() => handleDelete(selectedRowKeys.join())">删除</a-button>
+        <a-button type="danger" icon="delete" @click="() => handleDelete(selectedRowKeys.join())" v-priv="'UserManagerPriv.Delete'">删除</a-button>
       </a-dropdown>
     </div>
     <s-table

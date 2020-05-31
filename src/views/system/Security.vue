@@ -62,7 +62,7 @@
       </div>
     </a-form>
     <footer-tool-bar :style="{ width: isSideMenu() && isDesktop() ? `calc(100% - ${sidebarOpened ? 256 : 80}px)` : '100%'}">
-      <a-button type="primary" @click="save" :loading="loading">提交</a-button>
+      <a-button type="primary" @click="save" :loading="loading" v-priv="'AccountConfigPriv.Save'">提交</a-button>
     </footer-tool-bar>
   </div>
 </template>

@@ -8,9 +8,9 @@
   >
     <div class="right-list-toolbar right-list-panel-card">
       <toolbar>
-        <a-button icon="plus" @click="$refs.modal.add()">新建</a-button>
-        <a-button icon="save" @click="editClickHandler" :disabled="selectedRows.length != 1 || editEnable">编辑</a-button>
-        <a-button icon="delete" @click="delClickHandler" :disabled="selectedRows.length === 0 || delEnable">删除</a-button>
+        <a-button icon="plus" @click="$refs.modal.add()" v-priv="'CodeManagerPriv.Add'">新建</a-button>
+        <a-button icon="save" @click="editClickHandler" :disabled="selectedRows.length != 1 || editEnable" v-priv="'CodeManagerPriv.Edit'">编辑</a-button>
+        <a-button icon="delete" @click="delClickHandler" :disabled="selectedRows.length === 0 || delEnable" v-priv="'CodeManagerPriv.Delete'">删除</a-button>
       </toolbar>
       <div class="modal-table">
         <a-table

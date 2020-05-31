@@ -26,7 +26,7 @@
       </a-card>
     </a-spin>
     <footer-tool-bar :style="{ width: isSideMenu() && isDesktop() ? `calc(100% - ${sidebarOpened ? 256 : 80}px)` : '100%'}">
-      <a-button type="primary" @click="saveConfig" :loading="loading">提交</a-button>
+      <a-button type="primary" @click="saveConfig" :loading="loading" v-priv="'AccountConfigPriv.Save'">提交</a-button>
     </footer-tool-bar>
   </div>
 </template>
