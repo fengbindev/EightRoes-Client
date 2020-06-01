@@ -32,7 +32,6 @@ export default {
  // eslint-disable-next-line vue/require-prop-types
  props: ['value', 'config'],
   created () {
-    debugger
     this.updateOptions(this.config)
   }
 }
