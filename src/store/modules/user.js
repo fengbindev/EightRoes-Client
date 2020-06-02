@@ -63,7 +63,7 @@ const user = {
           }
           commit('SET_ADMIN_USERNAME', result.adminUserName)
           commit('SET_USERNAME', { userName: result.userName, welcome: welcome() })
-          commit('SET_AVATAR', '/avatar2.jpg')
+          commit('SET_AVATAR', './avatar2.jpg')
           commit('SET_INFO', { userName: result.userName, realName: result.realName })
           resolve(response)
         }).catch(error => {
