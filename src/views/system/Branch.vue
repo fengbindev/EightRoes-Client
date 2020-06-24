@@ -1,22 +1,5 @@
 <template>
   <a-card :bordered="false">
-    <div class="table-page-search-wrapper">
-      <a-form layout="inline">
-        <a-row :gutter="48">
-          <a-col :md="5" :sm="15">
-            <a-form-item label="部门名称" >
-              <a-input placeholder="请输入" v-model="queryParam.name"/>
-            </a-form-item>
-          </a-col>
-          <a-col :md="8" :sm="24">
-            <span class="table-page-search-submitButtons">
-              <a-button type="primary" @click="this.fetch">查询</a-button>
-              <a-button style="margin-left: 8px" @click="() => queryParam = {}">重置</a-button>
-            </span>
-          </a-col>
-        </a-row>
-      </a-form>
-    </div>
     <div class="table-operator">
       <a-button type="primary" icon="plus" @click="$refs.modal.add()" v-priv="'BranchManagerPriv.Add'">新建</a-button>
     </div>

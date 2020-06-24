@@ -52,7 +52,6 @@ import { STable } from '@/components'
 import MenuPermissionModal from '@/views/system/components/MenuPermissionModal'
 import { getRoleList, delRole } from '@/api/system'
 import RoleModal from '@/views/system/components/RoleModal'
-// import { checkPermission } from '@/utils/permissions'
 export default {
   name: 'Role',
   components: {
@@ -79,7 +78,9 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: {},
+      queryParam: {
+        roleName: ''
+      },
       // 表头
       columns: [
         {
@@ -110,7 +111,7 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        return getRoleList(Object.assign(parameter, this.queryParam))
+        return getRoleList(Object.assign(parameter, { roleName: this.queryParam.roleName ? this.queryParam.roleName.trim() : '' }))
       },
       selectedRowKeys: [],
       selectedRows: [],

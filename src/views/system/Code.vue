@@ -4,8 +4,8 @@
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="5" :sm="15">
-            <a-form-item label="用户名">
-              <a-input placeholder="请输入" v-model="queryParam.userName"/>
+            <a-form-item>
+              <a-input placeholder="请输入代码类别或名称" v-model="queryParam.searchName"/>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -104,7 +104,9 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        return getCodeList(Object.assign(parameter, this.queryParam))
+        return getCodeList(Object.assign(parameter, {
+            searchName: this.queryParam.searchName ? this.queryParam.searchName.trim() : ''
+          }))
       },
       selectedRowKeys: [],
       selectedRows: [],

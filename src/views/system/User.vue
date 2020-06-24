@@ -5,7 +5,12 @@
         <a-row :gutter="48">
           <a-col :md="5" :sm="15">
             <a-form-item label="用户名">
-              <a-input placeholder="请输入" v-model="queryParam.userName"/>
+              <a-input placeholder="请输入" v-model="queryParam.username"/>
+            </a-form-item>
+          </a-col>
+          <a-col :md="5" :sm="15">
+            <a-form-item label="姓名">
+              <a-input placeholder="请输入" v-model="queryParam.realname"/>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -140,7 +145,10 @@ export default {
       ],
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        return getUserList(Object.assign(parameter, this.queryParam))
+        return getUserList(Object.assign(parameter, {
+          username: this.queryParam.username ? this.queryParam.username.trim() : '',
+          realname: this.queryParam.realname ? this.queryParam.realname.trim() : ''
+        }))
       },
       selectedRowKeys: [],
       selectedRows: [],
