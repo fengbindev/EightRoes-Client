@@ -8,7 +8,8 @@ const api = {
   code: '/code',
   config: '/configs',
   schedule: '/schedule',
-  security: '/security'
+  security: '/security',
+  plugin: '/plugins'
 }
 
 export default api
@@ -284,5 +285,19 @@ export function password (parameter) {
     url: api.user + '/password',
     method: 'put',
     data: parameter
+  })
+}
+
+export function getPlugin () {
+  return axios({
+    url: api.plugin,
+    method: 'get'
+  })
+}
+
+export function getPluginDetail (pluginId) {
+  return axios({
+    url: api.plugin + `/${pluginId}`,
+    method: 'get'
   })
 }
