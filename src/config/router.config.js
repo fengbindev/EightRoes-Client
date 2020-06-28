@@ -377,7 +377,7 @@ export const asyncRouterMap = [
             path: '/system/plugin',
             name: 'plugin',
             component: () => import('@/views/system/Plugin'),
-            meta: { title: '插件管理', icon: 'tool', keepAlive: true, priv: [ 'ScheduleManagerPriv' ] }
+            meta: { title: '插件管理', icon: 'tool', keepAlive: true, priv: [ 'PluginManagerPriv' ] }
           }
         ]
       }
