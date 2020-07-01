@@ -34,12 +34,15 @@ export default {
     handleTitleClick (...args) {
       this.$emit('titleClick', { args })
     },
-
+    handleSearch (...args) {
+      this.$emit('handleSearch', { args })
+    },
     renderSearch () {
       return (
         <Search
-          placeholder="input search text"
+          placeholder="请输入插件名称"
           style="width: 100%; margin-bottom: 1rem"
+          {...{ on: { search: item => this.handleSearch(item) } }}
         />
       )
     },

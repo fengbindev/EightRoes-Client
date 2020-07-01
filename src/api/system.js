@@ -288,10 +288,12 @@ export function password (parameter) {
   })
 }
 
-export function getPlugin () {
+export function getPlugin (parameter) {
+  console.log(parameter)
   return axios({
     url: api.plugin,
-    method: 'get'
+    method: 'get',
+    params: parameter
   })
 }
 

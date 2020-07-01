@@ -6,6 +6,7 @@
           :dataSource="pluginTree"
           :openKeys.sync="openKeys"
           :search="true"
+          @handleSearch="handleSearch"
           @click="handleClick"></s-tree>
       </a-col>
       <a-col :span="19">
@@ -92,6 +93,13 @@ export default {
     onSelectChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
+    },
+    handleSearch (e) {
+      getPlugin(Object.assign({}, {
+        title: e.args[0] ? e.args[0] : ''
+      })).then(res => {
+         this.pluginTree = res.data
+      })
     }
   }
 }
