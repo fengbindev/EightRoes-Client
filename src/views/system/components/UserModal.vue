@@ -80,7 +80,7 @@
           mode="multiple"
           placeholder="请选择角色"
         >
-          <a-select-option v-for="role in roleOptions" :key="role.roleCode">{{
+          <a-select-option v-for="role in roleOptions" :key="role.roleCode" :value="role.roleCode">{{
             role.roleName
           }}</a-select-option>
         </a-select>
@@ -155,6 +155,10 @@ export default {
     edit (record) {
       if (record.userName) {
         this.method = 'edit'
+        const params = { 'branchInnercode': record.roleCode }
+        getRoleListByBranch(params).then(res => {
+          this.roleOptions = res.data
+        })
       }
       this.mdl = Object.assign({}, record)
       this.visible = true
