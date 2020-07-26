@@ -378,6 +378,26 @@ export const asyncRouterMap = [
             name: 'plugin',
             component: () => import('@/views/system/Plugin'),
             meta: { title: '插件管理', icon: 'tool', keepAlive: true, priv: [ 'PluginManagerPriv' ] }
+          },
+          {
+            path: '/system/log',
+            component: RouteView,
+            meta: { title: '系统日志', icon: 'tool' },
+            redirect: '/system/loginLog',
+            children: [
+              {
+                path: '/system/loginLog',
+                name: 'UserLoginLog',
+                component: () => import('@/views/system/UserLoginLog'),
+                meta: { title: '登录日志', keepAlive: true }
+              },
+              {
+                path: '/system/operateLog',
+                name: 'UserOperateLog',
+                component: () => import('@/views/system/UserOperateLog'),
+                meta: { title: '操作日志', keepAlive: true }
+              }
+            ]
           }
         ]
       }

@@ -9,7 +9,8 @@ const api = {
   config: '/configs',
   schedule: '/schedule',
   security: '/security',
-  plugin: '/plugins'
+  plugin: '/plugins',
+  log: '/operateLog'
 }
 
 export default api
@@ -301,5 +302,21 @@ export function getPluginDetail (pluginId) {
   return axios({
     url: api.plugin + `/${pluginId}`,
     method: 'get'
+  })
+}
+
+export function getUserLoginLog (parameter) {
+  return axios({
+    url: api.log + '/userloginlog',
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getOperateLog (parameter) {
+  return axios({
+    url: api.log + '/useroperatelog',
+    method: 'get',
+    params: parameter
   })
 }
