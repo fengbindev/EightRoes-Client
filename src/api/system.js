@@ -320,3 +320,11 @@ export function getOperateLog (parameter) {
     params: parameter
   })
 }
+
+export function getSqlLog (parameter) {
+  return axios({
+    url: api.log + '/sqllog',
+    method: 'get',
+    params: parameter
+  })
+}

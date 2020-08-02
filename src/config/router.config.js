@@ -396,6 +396,12 @@ export const asyncRouterMap = [
                 name: 'UserOperateLog',
                 component: () => import('@/views/system/UserOperateLog'),
                 meta: { title: '操作日志', keepAlive: true }
+              },
+              {
+                path: '/system/sqllog',
+                name: 'SqlLog',
+                component: () => import('@/views/system/SqlLog'),
+                meta: { title: 'SQL日志', keepAlive: true }
               }
             ]
           }
