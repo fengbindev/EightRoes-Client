@@ -402,6 +402,12 @@ export const asyncRouterMap = [
                 name: 'SqlLog',
                 component: () => import('@/views/system/SqlLog'),
                 meta: { title: 'SQL日志', keepAlive: true }
+              },
+              {
+                path: '/system/logfies',
+                name: 'DownloadLog',
+                component: () => import('@/views/system/DownloadLog'),
+                meta: { title: '日志下载', keepAlive: true }
               }
             ]
           }

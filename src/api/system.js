@@ -328,3 +328,11 @@ export function getSqlLog (parameter) {
     params: parameter
   })
 }
+
+export function getLogFile (parameter) {
+  return axios({
+    url: api.log + '/logfiles',
+    method: 'get',
+    params: parameter
+  })
+}

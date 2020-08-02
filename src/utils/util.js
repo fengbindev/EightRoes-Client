@@ -1,3 +1,5 @@
+import { axios } from '@/utils/request'
+
 export function timeFix () {
   const time = new Date()
   const hour = time.getHours()
@@ -64,4 +66,27 @@ export function removeLoadingAnimate (id = '', timeout = 1500) {
   setTimeout(() => {
     document.body.removeChild(document.getElementById(id))
   }, timeout)
+}
+
+// 下载文件
+export function downloadFile (fileURL, fileName) {
+  return axios
+    .get(fileURL, {
+      responseType: 'blob'
+    })
+    .then(blob => {
+      const link = document.createElement('a')
+      const url = window.URL.createObjectURL(blob)
+      link.href = url
+      link.download = fileName
+      link.click()
+      URL.revokeObjectURL(url)
+    })
+}
+export function urlJoin (baseURL, path) {
+  baseURL = baseURL.startsWith('http://') ? baseURL : `http://${baseURL}`
+  baseURL = baseURL.endsWith('/') ? baseURL.substring(0, baseURL.length - 1) : baseURL
+  path = path.startsWith('/') ? path : `/${path}`
+
+  return `${baseURL}${path}`
 }
