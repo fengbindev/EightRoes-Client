@@ -382,32 +382,32 @@ export const asyncRouterMap = [
           {
             path: '/system/log',
             component: RouteView,
-            meta: { title: '系统日志', icon: 'tool' },
+            meta: { title: '系统日志', icon: 'tool', priv: [ 'SystemLogPriv' ] },
             redirect: '/system/loginLog',
             children: [
               {
                 path: '/system/loginLog',
                 name: 'UserLoginLog',
                 component: () => import('@/views/system/UserLoginLog'),
-                meta: { title: '登录日志', keepAlive: true }
+                meta: { title: '登录日志', keepAlive: true, priv: [ 'UserLoginLogPriv' ] }
               },
               {
                 path: '/system/operateLog',
                 name: 'UserOperateLog',
                 component: () => import('@/views/system/UserOperateLog'),
-                meta: { title: '操作日志', keepAlive: true }
+                meta: { title: '操作日志', keepAlive: true, priv: [ 'UserOperateLogPriv' ] }
               },
               {
                 path: '/system/sqllog',
                 name: 'SqlLog',
                 component: () => import('@/views/system/SqlLog'),
-                meta: { title: 'SQL日志', keepAlive: true }
+                meta: { title: 'SQL日志', keepAlive: true, priv: [ 'SqlLogPriv' ] }
               },
               {
                 path: '/system/logfies',
                 name: 'DownloadLog',
                 component: () => import('@/views/system/DownloadLog'),
-                meta: { title: '日志下载', keepAlive: true }
+                meta: { title: '日志下载', keepAlive: true, priv: [ 'DownloadLogPriv' ] }
               }
             ]
           }
