@@ -17,6 +17,7 @@
         :labelCol="labelCol"
         :wrapperCol="wrapperCol"
         label="上级机构"
+        v-show="showBarnchTree"
       >
         <a-tree-select
           v-decorator="['parentInnercode', {rules: [{ required: true, message: '请选择上级机构' }]}]"
@@ -120,7 +121,8 @@ export default {
       selectManager: [],
       mdl: {},
       confirmLoading: false,
-      form: this.$form.createForm(this)
+      form: this.$form.createForm(this),
+      showBarnchTree: true
     }
   },
   beforeCreate () {
@@ -135,11 +137,17 @@ export default {
   },
   methods: {
     add (parentId) {
+      this.showBarnchTree = true
       this.form.resetFields()
       this.edit({ parentId: parentId || 0, orderFlag: 0 })
     },
     edit (record) {
       this.mdl = Object.assign({}, record)
+      if (this.mdl.parentInnercode === '0000') {
+        this.showBarnchTree = false
+      } else {
+        this.showBarnchTree = true
+      }
       this.visible = true
       this.$nextTick(() => {
         this.form.setFieldsValue(pick(this.mdl, 'branchInnercode', 'parentInnercode', 'branchCode', 'phone', 'name', 'orderFlag', 'fax'))
