@@ -3,6 +3,7 @@ import axios from 'axios'
 import store from '@/store'
 import Qs from 'qs'
 import notification from 'ant-design-vue/es/notification'
+import message from 'ant-design-vue/es/message'
 import { VueAxios } from './axios'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 
@@ -30,6 +31,9 @@ const err = (error) => {
           }, 1500)
         })
       }
+    }
+    if (error.response.status !== 1) {
+        message.error(data.message ? data.message : '服务器繁忙或网络错误，请检查网络是否通畅，稍后再试.')
     }
   }
   return Promise.reject(error)
